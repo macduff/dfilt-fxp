@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
+#include "dfilt_fxp.h"
 
 const uint16_t input[] = {0,11,0,0,0,11,14,9,0,0,0,24,0,37,18,0,0,0,0,20,
 0,0,13,0,0,10,0,0,0,15,17,11,26,0,0,8,2,0,0,0,
@@ -15,7 +16,7 @@ const uint16_t input[] = {0,11,0,0,0,11,14,9,0,0,0,24,0,37,18,0,0,0,0,20,
 489,474,546,507,469,502,531,475,491,503,514,490,510,493,464,504,475,473,509,492,
 };
 
-#define ALPHA       0.23906 /*0.75855 /*0.38587*/
+#define ALPHA       0.23906 
 #define FXP_ALPHA   (ALPHA*(uint16_t)(1<<15))
 int main(int argc, char * argv[])
 {
@@ -24,20 +25,13 @@ int main(int argc, char * argv[])
   int ii;
   FILE * fid;
   uint16_t output[sizeof(input)/sizeof(uint16_t)] = {0};
-  uint32_t a1 = ((1<<15)-alpha);
-  uint32_t b0 = alpha;
-  printf("alpha = %d : %f\n",alpha,((double)alpha)/((double)(1<<15)));
-  printf("a1 = %d : %f\n",a1,((double)a1)/((double)(1<<15)));
-  printf("b0 = %d : %f\n",b0,((double)b0)/((double)(1<<15)));
   
   fid = fopen("out.m","w");
   fprintf(fid,"y = [ 0, ");
   for(ii=1;ii<sizeof(input)/sizeof(uint16_t);ii++)
   {
-    uint32_t y1 = (a1*output[ii-1]) >> 15;
-    uint32_t u1 = (b0*input[ii]) >> 15;
-    
-    output[ii] = y1 + u1;
+    output[ii] = dfilt_single_pole(input[ii],output[ii-1],alpha);
+
     fprintf(fid,"%d,",output[ii]);
     if( (ii % 20) == 0 )
     {

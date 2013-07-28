@@ -1,3 +1,4 @@
+CFLAGS += -I ./dfilt_fxp
 
 all: dfilt.o dfilt_fxp.o
 	gcc dfilt.o dfilt_fxp.o -o dfilt  
