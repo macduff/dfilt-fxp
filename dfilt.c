@@ -30,7 +30,7 @@ int main(int argc, char * argv[])
   fprintf(fid,"y = [ 0, ");
   for(ii=1;ii<sizeof(input)/sizeof(uint16_t);ii++)
   {
-    output[ii] = dfilt_single_pole(input[ii],output[ii-1],alpha);
+    output[ii] = dfilt_single_pole_u16(input[ii],output[ii-1],alpha);
 
     fprintf(fid,"%d,",output[ii]);
     if( (ii % 20) == 0 )

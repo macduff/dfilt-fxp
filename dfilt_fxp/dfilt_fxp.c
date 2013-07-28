@@ -8,10 +8,11 @@
  *    alpha - cutoff frequency parameter, scaled by left shifted 15
  *  returns:
  *    current time step output of the filter
- *  Calculates the current output of the digital filter.
+ *  Calculates the current output of the digital filter for a two byte
+ *  unsigned signal.
  */
 uint16_t
-dfilt_single_pole(uint16_t input, uint16_t prev_output, uint16_t alpha)
+dfilt_single_pole_u16(uint16_t input, uint16_t prev_output, uint16_t alpha)
 {
   uint16_t output;                  /* current time step output */
   uint32_t beta = ((1<<15)-alpha);  /* coefficient of previous output */
