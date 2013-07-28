@@ -4,6 +4,8 @@
 
 #include "dfilt_fxp.h"
 
+/* Initialize a test signal, it is a step function mixed with
+ * some gaussian noise */
 const uint16_t input[] = {0,11,0,0,0,11,14,9,0,0,0,24,0,37,18,0,0,0,0,20,
 0,0,13,0,0,10,0,0,0,15,17,11,26,0,0,8,2,0,0,0,
 0,28,21,7,2,0,0,0,0,16,470,492,534,506,493,502,495,533,520,492,
@@ -16,6 +18,7 @@ const uint16_t input[] = {0,11,0,0,0,11,14,9,0,0,0,24,0,37,18,0,0,0,0,20,
 489,474,546,507,469,502,531,475,491,503,514,490,510,493,464,504,475,473,509,492,
 };
 
+/* Use the calculated cutoff constant, and its scaled counterpart */
 #define ALPHA       0.23906 
 #define FXP_ALPHA   (ALPHA*(uint16_t)(1<<15))
 int main(int argc, char * argv[])
@@ -25,19 +28,29 @@ int main(int argc, char * argv[])
   int ii;
   FILE * fid;
   uint16_t output[sizeof(input)/sizeof(uint16_t)] = {0};
-  
+  /* open a file for writing only, always makes a new file,
+	 * this data will be written to an m file for easy import
+	 * into octave for plotting, initialize the first value
+	 * at zero, even though this value is not known */
   fid = fopen("out.m","w");
   fprintf(fid,"y = [ 0, ");
+	/* process each input value in the test vector
+	 * start at 1 so that there is a previous value for
+	 * the first ouput */
   for(ii=1;ii<sizeof(input)/sizeof(uint16_t);ii++)
   {
+	  /* filter the signal */
     output[ii] = dfilt_single_pole_u16(input[ii],output[ii-1],alpha);
 
+    /* write the results to a file, add a newline every
+		 * 20 elements */
     fprintf(fid,"%d,",output[ii]);
     if( (ii % 20) == 0 )
     {
       fprintf(fid,"...\n");
     }
   }
+	/* finish the output vector syntax and close the file */
   fprintf(fid,"];\n");
   fclose(fid);
   return 0;
