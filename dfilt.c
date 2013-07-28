@@ -1,8 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdint.h>
 
-typedef unsigned short uint16_t;
-typedef unsigned int uint32_t;
 
 const uint16_t input[] = {0,11,0,0,0,11,14,9,0,0,0,24,0,37,18,0,0,0,0,20,
 0,0,13,0,0,10,0,0,0,15,17,11,26,0,0,8,2,0,0,0,
