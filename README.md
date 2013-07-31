@@ -1,4 +1,10 @@
-# README
+=======
+dfilt-fxp
+=========
+
+Simple example of fixed point single pole filter.
+
+# Summary 
 This is a **very** simple single pole fixed point filter implementation.
 It supports one data type, an unsigned two byte number.  The coefficient
 is based on a formula [insert link here].  This routine is suitable for
